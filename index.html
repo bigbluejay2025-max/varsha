@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Happy Valentine’s Day 💖</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+margin: 0;
+height: 100vh;
+overflow: hidden;
+font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+color: #1b0b16;
+background: radial-gradient(circle at 20% 15%, #fff6fb 0%, rgba(255,255,255,0) 30%),
+radial-gradient(circle at 80% 30%, #fff 0%, rgba(255,255,255,0) 26%),
+linear-gradient(135deg, #ff2f88, #ff9ed0, #ffe0f1);
+position: relative;
+}
+
+/* soft animated glow */
+.glow {
+position: absolute;
+inset: -200px;
+background: radial-gradient(circle at 30% 70%, rgba(255,255,255,.38), rgba(255,255,255,0) 55%),
+radial-gradient(circle at 70% 35%, rgba(255,255,255,.28), rgba(255,255,255,0) 60%),
+radial-gradient(circle at 55% 55%, rgba(255,20,120,.22), rgba(255,20,120,0) 60%);
+filter: blur(12px);
+animation: pulse 6s ease-in-out infinite;
+pointer-events: none;
+}
+
+@keyframes pulse {
+0%, 100% { transform: scale(1); opacity: .85; }
+50% { transform: scale(1.06); opacity: 1; }
+}
+
+/* center content */
+.wrap {
+position: relative;
+z-index: 2;
+height: 100vh;
+display: grid;
+place-items: center;
+padding: 18px;
+}
+
+.card {
+width: min(980px, 96vw);
+border-radius: 34px;
+padding: 38px 26px 34px;
+background: rgba(255, 255, 255, 0.88);
+border: 2px solid rgba(255, 255, 255, 0.65);
+box-shadow: 0 24px 80px rgba(0,0,0,.22);
+backdrop-filter: blur(10px);
+text-align: center;
+}
+
+.heart {
+font-size: clamp(64px, 11vw, 150px);
+display: inline-block;
+filter: drop-shadow(0 20px 22px rgba(255,0,120,.25));
+animation: beat 1.05s ease-in-out infinite;
+transform-origin: center;
+margin-bottom: 4px;
+}
+
+@keyframes beat {
+0%, 100% { transform: scale(1); }
+50% { transform: scale(1.10); }
+}
+
+.title {
+font-size: clamp(36px, 6.2vw, 72px);
+margin: 10px 0 8px;
+line-height: 1.05;
+letter-spacing: .6px;
+text-shadow: 0 10px 20px rgba(255,0,120,.18);
+}
+
+.message {
+font-size: clamp(16px, 2.2vw, 24px);
+margin: 0 auto;
+max-width: 46ch;
+opacity: .92;
+line-height: 1.45;
+}
+
+/* reveal button + animation */
+.btn {
+margin-top: 22px;
+font-size: clamp(16px, 2.2vw, 22px);
+padding: 14px 22px;
+border: 0;
+border-radius: 999px;
+cursor: pointer;
+color: white;
+background: linear-gradient(135deg, #ff2f88, #ff6fb3);
+box-shadow: 0 16px 40px rgba(255, 47, 136, 0.35);
+transition: transform .12s ease, filter .12s ease;
+}
+
+.btn:active { transform: scale(0.98); }
+.btn:hover { filter: brightness(1.03); }
+
+.reveal {
+margin-top: 22px;
+display: none;
+font-size: clamp(18px, 2.6vw, 30px);
+line-height: 1.25;
+color: #c2185b;
+animation: pop 650ms ease forwards;
+}
+
+@keyframes pop {
+from { transform: translateY(10px) scale(.98); opacity: 0; }
+to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* floating hearts background */
+.float {
+position: absolute;
+bottom: -10vh;
+animation: rise linear forwards;
+opacity: 0.95;
+filter: drop-shadow(0 10px 10px rgba(255,0,120,.18));
+pointer-events: none;
+z-index: 1;
+}
+
+@keyframes rise {
+from { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+10% { opacity: .95; }
+to { transform: translateY(-120vh) translateX(var(--drift)) scale(var(--scale)); opacity: 0; }
+}
+
+/* sparkles */
+.sparkle {
+position: absolute;
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background: rgba(255,255,255,.95);
+box-shadow: 0 0 18px rgba(255,255,255,.85);
+animation: twinkle 1.6s ease-in-out infinite;
+pointer-events: none;
+z-index: 1;
+}
+
+@keyframes twinkle {
+0%, 100% { transform: scale(.6); opacity: .55; }
+50% { transform: scale(1.2); opacity: 1; }
+}
+
+/* small footer line */
+.from {
+margin-top: 18px;
+font-size: clamp(13px, 1.8vw, 18px);
+opacity: .75;
+}
+</style>
+</head>
+
+<body>
+<div class="glow"></div>
+
+<div class="wrap">
+<div class="card" role="main" aria-label="Valentine message">
+<div class="heart" aria-hidden="true">💖</div>
+<div class="title">Hi Varsha! Happy Valentine’s Day, Sister!</div>
+
+<p class="message">
+You make life brighter just by being you. Thank you for the laughs, the support,
+and the love you give so easily. You’re truly one of a kind.
+</p>
+
+<button class="btn" id="openBtn">Tap for the big surprise ✨</button>
+
+<div class="reveal" id="revealMsg">
+Sending you a giant hug, all the love, and a sky full of hearts 💕<br/>
+Today and always, you’re appreciated more than you know.
+</div>
+
+<div class="from">With love 💗</div>
+</div>
+</div>
+
+<script>
+// Reveal message + burst of hearts
+const openBtn = document.getElementById("openBtn");
+const revealMsg = document.getElementById("revealMsg");
+
+openBtn.addEventListener("click", () => {
+openBtn.style.display = "none";
+revealMsg.style.display = "block";
+burst(26);
+});
+
+// Create floating hearts continuously
+const emojis = ["💖","💘","❤️","💕","💗","💞","💝"];
+
+function spawnHeart() {
+const h = document.createElement("div");
+h.className = "float";
+h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+const size = Math.random() * 26 + 18; // 18 - 44px
+h.style.fontSize = size + "px";
+h.style.left = Math.random() * 100 + "vw";
+h.style.setProperty("--drift", (Math.random() * 120 - 60) + "px");
+h.style.setProperty("--scale", (Math.random() * 0.9 + 0.8).toFixed(2));
+h.style.animationDuration = (Math.random() * 3.5 + 5.5).toFixed(2) + "s";
+document.body.appendChild(h);
+setTimeout(() => h.remove(), 10000);
+}
+setInterval(spawnHeart, 260);
+
+// Sparkles placed around screen
+for (let i = 0; i < 22; i++) {
+const s = document.createElement("div");
+s.className = "sparkle";
+s.style.left = Math.random() * 100 + "vw";
+s.style.top = Math.random() * 100 + "vh";
+s.style.animationDelay = (Math.random() * 1.6).toFixed(2) + "s";
+s.style.transform = `scale(${(Math.random() * 0.9 + 0.6).toFixed(2)})`;
+document.body.appendChild(s);
+}
+
+// Extra heart burst on reveal
+function burst(n) {
+for (let i = 0; i < n; i++) {
+setTimeout(spawnHeart, i * 35);
+}
+}
+</script>
+</body>
+</html>
